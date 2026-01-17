@@ -1,12 +1,8 @@
 # Thermostat
 
-This example creates a Thermostat device using the ESP
+This creates a Thermostat device using the ESP
 Matter data model.
 
-## 1. Additional Environment Setup
-
-No additional setup is required.
-
-## 2. Post Commissioning Setup
-
-No additional setup is required.
+The Thermostat is verified working with versions below:
+- esp-idf: tag/v5.4.1
+- esp-matter: release/v1.4.2
