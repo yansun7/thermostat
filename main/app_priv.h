@@ -21,7 +21,6 @@
 // I2C 接口 (用于 SSD1306 OLED)
 #define I2C_SDA_PIN          GPIO_NUM_21
 #define I2C_SCL_PIN          GPIO_NUM_22
-#define I2C_HOST             I2C_NUM_0
 
 // UART 接口 (用于三菱 CN105)
 #define HVAC_UART_TX_PIN     GPIO_NUM_17

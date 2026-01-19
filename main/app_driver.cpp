@@ -18,6 +18,13 @@
 #include <app-common/zap-generated/ids/Clusters.h>
 
 #include "driver/gpio.h"
+#include "driver/i2c_master.h"
+
+#include "u8g2.h"
+
+extern "C" {
+    #include "u8g2_esp32_hal.h"
+}
 
 using namespace esp_matter;
 using namespace esp_matter::attribute;
@@ -27,6 +34,32 @@ using namespace chip::app::Clusters;
 
 static const char *TAG = "app_driver";
 extern uint16_t thermostat_endpoint_id;
+u8g2_t u8g2;
+
+void demo_u8g2()
+{
+    u8g2_esp32_hal_t u8g2_esp32_hal = U8G2_ESP32_HAL_DEFAULT;
+
+    u8g2_esp32_hal.bus.i2c.sda = I2C_SDA_PIN;
+    u8g2_esp32_hal.bus.i2c.scl = I2C_SCL_PIN;
+    u8g2_esp32_hal_init(u8g2_esp32_hal);
+
+    u8g2_Setup_ssd1306_i2c_128x64_noname_f(
+        &u8g2,
+        U8G2_R0,
+        u8g2_esp32_i2c_byte_cb,
+        u8g2_esp32_gpio_and_delay_cb
+    );
+
+    u8g2_SetI2CAddress(&u8g2.u8x8, 0x78);
+    u8g2_InitDisplay(&u8g2);
+    u8g2_SetPowerSave(&u8g2, 0);
+    u8g2_ClearBuffer(&u8g2);
+
+    u8g2_SetFont(&u8g2, u8g2_font_ncenB14_tr);
+    u8g2_DrawStr(&u8g2, 0, 40, "Hello ESP32!");
+    u8g2_SendBuffer(&u8g2);
+}
 
 // --- 硬件初始化函数 ---
 esp_err_t app_driver_init()
@@ -37,7 +70,8 @@ esp_err_t app_driver_init()
     // ssd1306_init(); 
     // ssd1306_clear_screen();
     // ssd1306_show_text("Booting...");
-    ESP_LOGI(TAG, "==== OLED Display Initialized (Mock)");
+    ESP_LOGI(TAG, "==== OLED Display Initializing...");
+    demo_u8g2();
 
     /* 2. 初始化 三菱 HVAC (UART) - 之后填充 */
     // mitsubishi_hvac_init();
